@@ -27,12 +27,15 @@ let countTopThreeCalories =
         if String.IsNullOrWhiteSpace line
         then
             do sums.Add(currentSum) |> ignore
+            if sums.Count > 3
+            then
+                for droppedValue in sums.Reverse() |> Seq.skip 3 |> Seq.toArray do
+                    do sums.Remove(droppedValue) |> ignore
             currentSum <- 0
         else
             let number = line |> int
             currentSum <- currentSum + number
     sums.Reverse()
-    |> Seq.truncate 3
     |> Seq.sum
     
 ()
